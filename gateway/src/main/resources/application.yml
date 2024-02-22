@@ -1,0 +1,84 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+#<<< API Gateway / Routes
+      routes:
+        - id: payment
+          uri: http://localhost:8082
+          predicates:
+            - Path=/payments/**, 
+        - id: Shop
+          uri: http://localhost:8083
+          predicates:
+            - Path=/shopReservations/**, 
+        - id: myPage
+          uri: http://localhost:8084
+          predicates:
+            - Path=, 
+        - id: reservation
+          uri: http://localhost:8085
+          predicates:
+            - Path=/shops/**, 
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+#>>> API Gateway / Routes
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: payment
+          uri: http://payment:8080
+          predicates:
+            - Path=/payments/**, 
+        - id: Shop
+          uri: http://shop:8080
+          predicates:
+            - Path=/shopReservations/**, 
+        - id: myPage
+          uri: http://myPage:8080
+          predicates:
+            - Path=, 
+        - id: reservation
+          uri: http://reservation:8080
+          predicates:
+            - Path=/shops/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
