@@ -17,8 +17,17 @@ spec:
       containers:
         - name: order
           image: forjjini1234/order:0131
+          env:
+            - name: CLASS
+              valueFrom:
+              configMapKeyRef:
+              name: my-config
+              key: class
           ports:
             - containerPort: 8080
+          resources:
+            requests:
+              cpu: "200m" 
           readinessProbe:
             httpGet:
               path: '/actuator/health'
